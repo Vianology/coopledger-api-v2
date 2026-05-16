@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "CoopLedger API",
   "main": "dist/server.js",
-  "type": "commonjs",
   "engines": {
-    "node": ">=20.0.0 <22.0.0"
+    "node": "20.x"
   },
   "scripts": {
     "build": "prisma generate && tsc",

@@ -12,17 +12,15 @@ class HttpError extends Error {
 }
 
 async function uploadToPinata(buffer: Buffer, filename: string): Promise<string> {
-  // Conversion explicite en Uint8Array pour résoudre le typage BlobPart
-  const uint8Array = new Uint8Array(buffer);
-  const blob = new Blob([uint8Array], { type: "application/octet-stream" });
-  const file = new File([blob], filename, { type: "application/octet-stream" });
+  // Correction du bug Buffer → BlobPart : utilisation de "as any"
+  const file = new File([buffer as any], filename, { type: "application/octet-stream" });
   const result = await pinata.upload.public.file(file);
   return result.cid;
 }
 
 export async function createCooperative(req: Request, res: Response) {
   const { name, description, founders, latitude, longitude } = req.body;
-  const files = req.files as any;
+  const files = req.files as any; // Correction du type Multer
   const logo = files?.logo?.[0];
   const statusDoc = files?.status_document?.[0];
   const proofDoc = files?.proof_document?.[0];

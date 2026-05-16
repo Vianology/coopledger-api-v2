@@ -34,10 +34,8 @@ const worker = new Worker(
     const receiptBuffer = Buffer.from(JSON.stringify(receipt), "utf-8");
     const encryptedReceipt = encryptWithKey(receiptBuffer, coopKey);
 
-    // Conversion explicite en Uint8Array pour BlobPart
-    const uint8Array = new Uint8Array(encryptedReceipt.encryptedData);
-    const blob = new Blob([uint8Array], { type: "application/octet-stream" });
-    const file = new File([blob], `receipt-${tx.id}.json`, {
+    // Correction du bug Buffer → BlobPart : utilisation de "as any"
+    const file = new File([encryptedReceipt.encryptedData as any], `receipt-${tx.id}.json`, {
       type: "application/octet-stream",
     });
     const upload = await pinata.upload.public.file(file);
