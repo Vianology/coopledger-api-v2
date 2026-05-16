@@ -1,9 +1,12 @@
 import { Queue } from "bullmq";
-import { default as Redis } from "ioredis";
-import { env } from "../config/env";
+import { redis } from "./redis.js";
 
-const connection = new Redis(env.REDIS_URL, { maxRetriesPerRequest: null, enableReadyCheck: false });
 export const blockchainQueue = new Queue("blockchain-transactions", {
-  connection,
-  defaultJobOptions: { attempts: 3, backoff: { type: "exponential", delay: 5000 }, removeOnComplete: 100, removeOnFail: 500 },
+  connection: redis,
+  defaultJobOptions: {
+    attempts: 3,
+    backoff: { type: "exponential", delay: 5000 },
+    removeOnComplete: 100,
+    removeOnFail: 500,
+  },
 });
