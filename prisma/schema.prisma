@@ -52,16 +52,16 @@ enum VoteStatus {
 }
 
 model User {
-  id                  String   @id @default(cuid())
-  email               String   @unique
-  emailVerified       Boolean  @default(false)
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  emailVerified       Boolean   @default(false)
   name                String
-  phoneNumber         String   @unique
-  role                String   @default("MEMBER")
+  phoneNumber         String    @unique
+  role                String    @default("MEMBER")
   publicKey           String?
   encryptedPrivateKey String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
   memberships         Membership[]
   transactions        Transaction[]
   voteCasts           VoteCast[]
@@ -72,7 +72,7 @@ model User {
 }
 
 model Cooperative {
-  id                      String   @id @default(cuid())
+  id                      String      @id @default(cuid())
   name                    String
   description             String
   logo                    String?
@@ -80,21 +80,21 @@ model Cooperative {
   latitude                Float?
   longitude               Float?
   encryptionKey           String
-  status                  String   @default("ACTIVE")
+  status                  String      @default("ACTIVE")
   fedapayApiKeyPublic     String?
   fedapayApiKeySecret     String?
-  payoutEnabled           Boolean  @default(false)
+  payoutEnabled           Boolean     @default(false)
   statusDocumentCid       String?
   proofDocumentCid        String?
   identityDocumentCid     String?
   businessPlanDocumentCid String?
   creatorId               String
-  creator                 User     @relation("Creator", fields: [creatorId], references: [id])
+  creator                 User        @relation("Creator", fields: [creatorId], references: [id])
   memberships             Membership[]
   transactions            Transaction[]
   votes                   Vote[]
-  createdAt               DateTime @default(now())
-  updatedAt               DateTime @updatedAt
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
 }
 
 model Membership {
@@ -165,7 +165,7 @@ model VoteCast {
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  type              String
+  type              String?   // ← MODIFICATION : rendu optionnel
   provider          String
   providerAccountId String
   refresh_token     String? @db.Text
