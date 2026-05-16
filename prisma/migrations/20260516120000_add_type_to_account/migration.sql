@@ -1,2 +1,2 @@
--- Ajouter la colonne "type" à la table account si elle n'existe pas
+-- Ajout de la colonne "type" à la table account
 ALTER TABLE "account" ADD COLUMN IF NOT EXISTS "type" TEXT NOT NULL DEFAULT '';
