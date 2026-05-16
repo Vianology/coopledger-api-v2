@@ -1,11 +1,11 @@
 import { Worker } from "bullmq";
-import { prisma } from "../utils/prisma.js";
-import { blockchainQueue } from "../utils/queue.js";
-import { ProofType, recordProofOnChain } from "../services/blockchain.service.js";
-import { encryptWithKey } from "../services/crypto.service.js";
-import { pinata } from "../utils/storage.js";
+import { prisma } from "../utils/prisma";
+import { blockchainQueue } from "../utils/queue";
+import { ProofType, recordProofOnChain } from "../services/blockchain.service";
+import { encryptWithKey } from "../services/crypto.service";
+import { pinata } from "../utils/storage";
 import { createHash } from "node:crypto";
-import { decrypt } from "../services/crypto.service.js";
+import { decrypt } from "../services/crypto.service";
 
 const worker = new Worker(
   "blockchain-transactions",
@@ -34,18 +34,14 @@ const worker = new Worker(
     const receiptBuffer = Buffer.from(JSON.stringify(receipt), "utf-8");
     const encryptedReceipt = encryptWithKey(receiptBuffer, coopKey);
 
-    // Correction du bug Buffer → BlobPart : utilisation de "as any"
     const file = new File([encryptedReceipt.encryptedData as any], `receipt-${tx.id}.json`, {
       type: "application/octet-stream",
     });
     const upload = await pinata.upload.public.file(file);
     const cid = upload.cid;
 
-    const hash = createHash("sha256")
-      .update(encryptedReceipt.encryptedData)
-      .digest("hex");
-    const proofType =
-      tx.type === "COTISATION" ? ProofType.COTISATION : ProofType.RETRAIT;
+    const hash = createHash("sha256").update(encryptedReceipt.encryptedData).digest("hex");
+    const proofType = tx.type === "COTISATION" ? ProofType.COTISATION : ProofType.RETRAIT;
     const blockchainTxHash = await recordProofOnChain(
       tx.cooperativeId,
       hash,

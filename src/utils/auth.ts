@@ -1,28 +1,29 @@
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { expo } from "@better-auth/expo";
-import { dash } from "@better-auth/infra";
-import { env } from "../config/env";
-import { prisma } from "./prisma";
+import { fromNodeHeaders } from "better-auth/node";
+import type { NextFunction, Request, Response } from "express";
+import { auth } from "../utils/auth";
+import { prisma } from "../utils/prisma";
 
-export const auth = betterAuth({
-  appName: "CoopLedger",
-  baseURL: env.BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
-  database: prismaAdapter(prisma, { provider: "postgresql" }), // sans usePlural
-  plugins: [expo(), dash()],
-  emailAndPassword: { enabled: true },
-  socialProviders: {
-    google: {
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    },
-  },
-  user: {
-    additionalFields: {
-      phoneNumber: { type: "string", required: true, input: true },
-      role: { type: "string", required: true, input: true },
-    },
-  },
-  trustedOrigins: ["coopledger://"],
-});
+declare global {
+  namespace Express {
+    interface Request {
+      session: typeof auth.$Infer.Session;
+    }
+  }
+}
+
+export async function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+  if (!session) return res.status(401).json({ message: "Unauthorized" });
+  req.session = session;
+  next();
+}
+
+export async function isPlatformAdmin(req: Request, res: Response, next: NextFunction) {
+  const user = req.session.user;
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
+  const admin = await prisma.user.findUnique({ where: { id: user.id, role: "ADMIN" } });
+  if (!admin) return res.status(403).json({ message: "Forbidden" });
+  next();
+}

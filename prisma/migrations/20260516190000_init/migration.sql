@@ -129,7 +129,7 @@ CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "type" TEXT,
-    "provider" TEXT NOT NULL,
+    "provider" TEXT,
     "providerAccountId" TEXT NOT NULL,
     "refresh_token" TEXT,
     "access_token" TEXT,

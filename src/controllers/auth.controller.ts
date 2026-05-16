@@ -7,7 +7,7 @@ export const finalizeOnboarding = async (req: Request, res: Response) => {
     const updatedUser = await IdentityService.onboardUserBlockchain(userId);
     return res.status(200).json({ message: "Identité blockchain générée", publicKey: updatedUser.publicKey });
   } catch (error) {
-    console.error(error);
+    console.error("Erreur finalizeOnboarding:", error);
     return res.status(500).json({ message: "Erreur lors de la génération de l'identité blockchain" });
   }
 };

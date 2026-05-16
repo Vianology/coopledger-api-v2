@@ -8,7 +8,7 @@ const prismaClient = globalForPrisma.prisma ?? new PrismaClient({
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prismaClient;
 
-// Alias pour conserver les anciens noms (User, Account, Session, etc.) utilisés dans les contrôleurs
+// Alias pour éviter de réécrire tous les contrôleurs (prisma.user -> prismaClient.user)
 export const prisma = prismaClient as any;
 prisma.user = prismaClient.user;
 prisma.account = prismaClient.account;

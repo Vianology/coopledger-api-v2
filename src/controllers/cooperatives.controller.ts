@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import { MembershipGrade, MembershipRole, MembershipStatus } from "@prisma/client";
-import { cloudinary, pinata } from "../utils/storage.js";
-import { encrypt, generateCoopKey, encryptWithKey } from "../services/crypto.service.js";
-import { prisma } from "../utils/prisma.js";
+import { cloudinary, pinata } from "../utils/storage";
+import { encrypt, generateCoopKey, encryptWithKey } from "../services/crypto.service";
+import { prisma } from "../utils/prisma";
 
 class HttpError extends Error {
   constructor(public statusCode: number, message: string) {
@@ -12,7 +12,6 @@ class HttpError extends Error {
 }
 
 async function uploadToPinata(buffer: Buffer, filename: string): Promise<string> {
-  // Correction du bug Buffer → BlobPart : utilisation de "as any"
   const file = new File([buffer as any], filename, { type: "application/octet-stream" });
   const result = await pinata.upload.public.file(file);
   return result.cid;
@@ -20,7 +19,7 @@ async function uploadToPinata(buffer: Buffer, filename: string): Promise<string>
 
 export async function createCooperative(req: Request, res: Response) {
   const { name, description, founders, latitude, longitude } = req.body;
-  const files = req.files as any; // Correction du type Multer
+  const files = req.files as any;
   const logo = files?.logo?.[0];
   const statusDoc = files?.status_document?.[0];
   const proofDoc = files?.proof_document?.[0];

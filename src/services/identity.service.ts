@@ -8,5 +8,8 @@ export const onboardUserBlockchain = async (userId: string) => {
   if (user.publicKey) return user;
   const wallet = Wallet.createRandom();
   const encryptedKey = encrypt(wallet.privateKey);
-  return await prisma.user.update({ where: { id: userId }, data: { publicKey: wallet.address, encryptedPrivateKey: encryptedKey } });
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { publicKey: wallet.address, encryptedPrivateKey: encryptedKey },
+  });
 };
