@@ -1,11 +1,4 @@
-import Redis from "ioredis";
-import { env } from "../config/env";
-
-const redis = new Redis(env.REDIS_URL, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-  tls: {}, // Force TLS
-});
+import { redis } from "../utils/redis";
 
 export async function setOTP(phone: string, code: string): Promise<void> {
   await redis.set(`otp:${phone}`, code, "EX", 300);

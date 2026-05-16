@@ -9,10 +9,7 @@ export const auth = betterAuth({
   appName: "CoopLedger",
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
-  database: prismaAdapter(prisma, {
-    provider: "postgresql",
-    usePlural: false,   // ← CHANGER true → false
-  }),
+  database: prismaAdapter(prisma, { provider: "postgresql" }), // sans usePlural
   plugins: [expo(), dash()],
   emailAndPassword: { enabled: true },
   socialProviders: {
