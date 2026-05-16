@@ -29,8 +29,7 @@ app.use(cors({ origin: "*", credentials: true }));
 app.use(compression());
 app.use(morgan("dev"));
 
-// ✅ Route Better Auth – syntaxe correcte pour Express 5 (capture tout sous /api/auth)
-app.all("/api/auth/*", toNodeHandler(auth));
+app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
