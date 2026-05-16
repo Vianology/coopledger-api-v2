@@ -28,11 +28,14 @@ export const io = new Server(server, { cors: { origin: "*" } });
 app.use(cors({ origin: "*", credentials: true }));
 app.use(compression());
 app.use(morgan("dev"));
+
+// ✅ Syntaxe correcte pour Express 5 (capture toutes les routes /api/auth/*)
+app.all("/api/auth/*", toNodeHandler(auth));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.all("/api/auth/{*splat}", toNodeHandler(auth));
 app.use("/api/auth/whatsapp", otpRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/cooperatives", cooperativesRoutes);

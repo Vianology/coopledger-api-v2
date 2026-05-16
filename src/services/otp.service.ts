@@ -1,13 +1,13 @@
-import { redis } from "../utils/redis.js";
+import { upstash } from "../utils/upstash.js";
 
 export async function setOTP(phone: string, code: string): Promise<void> {
-  await redis.set(`otp:${phone}`, code, "EX", 300);
+  await upstash.set(`otp:${phone}`, code, { ex: 300 });
 }
 
 export async function getOTP(phone: string): Promise<string | null> {
-  return await redis.get(`otp:${phone}`);
+  return await upstash.get(`otp:${phone}`);
 }
 
 export async function deleteOTP(phone: string): Promise<void> {
-  await redis.del(`otp:${phone}`);
+  await upstash.del(`otp:${phone}`);
 }

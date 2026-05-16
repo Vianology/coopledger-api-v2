@@ -11,6 +11,8 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(32),
   DATABASE_URL: z.string(),
   REDIS_URL: z.string(),
+  UPSTASH_REDIS_REST_URL: z.string(),
+  UPSTASH_REDIS_REST_TOKEN: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   ENCRYPTION_KEY: z.string().min(32),
