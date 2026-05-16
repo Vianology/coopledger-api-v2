@@ -165,8 +165,8 @@ model voteCast {
 model account {
   id                String  @id @default(cuid())
   userId            String
-  type              String?   // ← champ optionnel
-  provider          String
+  type              String?
+  providerId        String    // ← renommé (correspond à providerId envoyé par Better Auth)
   providerAccountId String
   refresh_token     String? @db.Text
   access_token      String? @db.Text
@@ -176,7 +176,7 @@ model account {
   id_token          String? @db.Text
   session_state     String?
   user              user    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([provider, providerAccountId])
+  @@unique([providerId, providerAccountId])
 }
 
 model session {

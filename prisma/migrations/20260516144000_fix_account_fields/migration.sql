@@ -129,7 +129,7 @@ CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "type" TEXT,
-    "provider" TEXT NOT NULL,
+    "providerId" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
     "refresh_token" TEXT,
     "access_token" TEXT,
@@ -173,7 +173,7 @@ CREATE UNIQUE INDEX "user_phoneNumber_key" ON "user"("phoneNumber");
 CREATE UNIQUE INDEX "voteCast_voteId_userId_key" ON "voteCast"("voteId", "userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "account_provider_providerAccountId_key" ON "account"("provider", "providerAccountId");
+CREATE UNIQUE INDEX "account_providerId_providerAccountId_key" ON "account"("providerId", "providerAccountId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "session_sessionToken_key" ON "session"("sessionToken");
