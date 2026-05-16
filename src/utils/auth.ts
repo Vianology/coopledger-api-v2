@@ -9,11 +9,17 @@ export const auth = betterAuth({
   appName: "CoopLedger",
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
-  database: prismaAdapter(prisma, { provider: "postgresql", usePlural: true }),
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+    usePlural: false,   // ← CHANGER true → false
+  }),
   plugins: [expo(), dash()],
   emailAndPassword: { enabled: true },
   socialProviders: {
-    google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET },
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
   },
   user: {
     additionalFields: {
