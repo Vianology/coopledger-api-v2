@@ -165,7 +165,7 @@ model voteCast {
 model account {
   id                String  @id @default(cuid())
   userId            String
-  type              String
+  type              String?   // ← champ optionnel
   provider          String
   providerAccountId String
   refresh_token     String? @db.Text
